@@ -2,6 +2,7 @@ package rskupnik.edgar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rskupnik.edgar.networking.Server;
 import rskupnik.parrot.Parrot;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class Edgar {
     public Edgar() {
         logger.info("Launching Edgar...");
         loadConfiguration();
-
+        Server.launch();
     }
 
     private void loadConfiguration() {
