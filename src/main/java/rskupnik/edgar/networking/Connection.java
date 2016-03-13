@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class Connection extends Thread implements Observable {
+final class Connection extends Thread implements Observable {
 
     private static final Logger logger = LogManager.getLogger(Connection.class);
 
