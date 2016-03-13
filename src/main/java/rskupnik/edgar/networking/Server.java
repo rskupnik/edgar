@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Server extends Thread implements Observer {
+public final class Server extends Thread implements Observer {
 
     private static Server INSTANCE;
     private static final int PORT = Integer.parseInt(Parrot.get("port").orElse(String.valueOf(Constants.DEFAULT_PORT)));
@@ -29,7 +29,6 @@ public class Server extends Thread implements Observer {
     private Server() {
         try {
             serverSocket = new ServerSocket(PORT);
-            logger.info("Listening on port "+PORT);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
             System.exit(0);
@@ -38,37 +37,56 @@ public class Server extends Thread implements Observer {
 
     public static Server getInstance() {
         if (INSTANCE == null)
-            INSTANCE = new Server();
+            launch();
 
         return INSTANCE;
     }
 
     public static void launch() {
-        if (INSTANCE == null)
+        if (INSTANCE == null) {
             INSTANCE = new Server();
+            INSTANCE.setDaemon(false);
+            INSTANCE.setName("Edgar-server");
+            INSTANCE.start();
+        }
     }
 
     @Override
     public void run() {
-        while (!exit) {
-            try {
+        logger.info("Listening on port "+PORT);
+        try {
+            while (!exit) {
                 Socket clientSocket = serverSocket.accept();
-                Connection connection = new Connection(serverSocket, clientSocket);
-                connection.attach(this);
+
                 UUID uuid = UUID.randomUUID();
-                connections.put(uuid, connection);
-                logger.info("Accepted a new connection from "+clientSocket.getInetAddress().getHostAddress());
-                logger.debug("Assigned uuid: "+uuid);
-                connection.start();
+                Connection connection = new Connection(uuid, serverSocket, clientSocket);
+                if (connection.isOk()) {    // Connection is not considered ok when there is an IOException in the constructor
+                    connection.attach(this);
+                    connections.put(uuid, connection);
+                    logger.info("Accepted a new connection from " + clientSocket.getInetAddress().getHostAddress());
+                    logger.debug("Assigned uuid: " + uuid);
+                    connection.start();
+                }
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            try {
+                serverSocket.close();
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }
         }
     }
 
-    public void update(Observable observable, Message message) {
+    public void update(Observable observable, Message message, Object payload) {
         switch (message) {
             case DISCONNECTED:
+                UUID connectionUuid = (UUID) payload;
+                Connection connection = connections.get(connectionUuid);
+                connections.remove(connectionUuid);
+                logger.debug("Removed connection ["+connectionUuid+"] from ["+connection.getHost()+"]");
+                logger.debug("Remaining connections: "+connections.entrySet().size());
                 break;
         }
     }

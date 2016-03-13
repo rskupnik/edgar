@@ -7,7 +7,7 @@ import rskupnik.parrot.Parrot;
 
 import java.io.IOException;
 
-public class Edgar {
+public final class Edgar {
 
     public static void main(String[] args) {
         new Edgar();
