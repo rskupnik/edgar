@@ -1,4 +1,4 @@
-package rskupnik.edgar.chainofresponsibility;
+package rskupnik.edgar.glue.designpatterns.chainofresponsibility;
 
 public interface Handler {
     Handler next();

@@ -2,14 +2,13 @@ package rskupnik.edgar.networking;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import rskupnik.edgar.observer.Message;
-import rskupnik.edgar.observer.Observable;
-import rskupnik.edgar.observer.Observer;
+import rskupnik.edgar.glue.designpatterns.observer.Message;
+import rskupnik.edgar.glue.designpatterns.observer.Observable;
+import rskupnik.edgar.glue.designpatterns.observer.Observer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
