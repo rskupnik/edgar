@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.glue.designpatterns.observer.Message;
 import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
+import rskupnik.edgar.networking.packethandling.PacketHandler;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,8 +20,6 @@ final class Connection extends Thread implements Observable {
 
     private static final Logger logger = LogManager.getLogger(Connection.class);
 
-    private static final int COMMAND_PACKET = 0x01;
-
     private UUID uuid;
     private ServerSocket serverSocket;
     private Socket clientSocket;
@@ -32,7 +31,7 @@ final class Connection extends Thread implements Observable {
     private boolean ok = true;
 
     protected Connection(UUID uuid, ServerSocket serverSocket, Socket clientSocket) {
-        this.setName("Connection-"+uuid.toString().substring(0, 8));
+        this.setName("Connection-" + uuid.toString().substring(0, 8));
         try {
             this.uuid = uuid;
             this.serverSocket = serverSocket;
@@ -57,8 +56,8 @@ final class Connection extends Thread implements Observable {
                     continue;
                 }
 
-                logger.debug("Received a packet, ID: "+packetId);
-                handle(packetId);
+                logger.debug("Received a packet, ID: " + packetId);
+                PacketHandler.handle(packetId, clientInputStream);
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -72,25 +71,8 @@ final class Connection extends Thread implements Observable {
         }
     }
 
-    private void handle(int packetId) {
-        try {
-            switch (packetId) {
-                case COMMAND_PACKET:
-                    logger.debug("Packet type: COMMAND_PACKET");
-                    String cmd = clientInputStream.readUTF();
-                    logger.debug("Command retrieved: "+cmd);
-                    break;
-                default:
-                    logger.error("Unknown packet id: " + packetId);
-                    break;
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
     public void notify(Message message, Object payload) {
-        logger.debug("Sending a message of type "+message+" with payload: "+payload);
+        logger.debug("Sending a message of type " + message + " with payload: " + payload);
         observers.forEach(observer -> observer.update(this, message, payload));
     }
 
