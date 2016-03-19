@@ -2,6 +2,7 @@ package rskupnik.edgar.networking;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rskupnik.edgar.networking.packethandling.PacketHandler;
 import rskupnik.edgar.observer.Message;
 import rskupnik.edgar.observer.Observable;
 import rskupnik.edgar.observer.Observer;
@@ -19,8 +20,6 @@ import java.util.UUID;
 final class Connection extends Thread implements Observable {
 
     private static final Logger logger = LogManager.getLogger(Connection.class);
-
-    private static final int COMMAND_PACKET = 0x01;
 
     private UUID uuid;
     private ServerSocket serverSocket;
@@ -59,7 +58,7 @@ final class Connection extends Thread implements Observable {
                 }
 
                 logger.debug("Received a packet, ID: "+packetId);
-                handle(packetId);
+                PacketHandler.handle(packetId, clientInputStream);
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -70,23 +69,6 @@ final class Connection extends Thread implements Observable {
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }
-        }
-    }
-
-    private void handle(int packetId) {
-        try {
-            switch (packetId) {
-                case COMMAND_PACKET:
-                    logger.debug("Packet type: COMMAND_PACKET");
-                    String cmd = clientInputStream.readUTF();
-                    logger.debug("Command retrieved: "+cmd);
-                    break;
-                default:
-                    logger.error("Unknown packet id: " + packetId);
-                    break;
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
         }
     }
 
