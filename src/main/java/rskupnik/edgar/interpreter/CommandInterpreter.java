@@ -2,6 +2,8 @@ package rskupnik.edgar.interpreter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rskupnik.edgar.scriptengine.*;
+import rskupnik.edgar.scriptengine.ScriptEngine;
 
 public final class CommandInterpreter {
 
@@ -16,7 +18,7 @@ public final class CommandInterpreter {
 
     private static final Logger logger = LogManager.getLogger(CommandInterpreter.class);
 
-    private ScriptEngine scriptEngine;
+    private rskupnik.edgar.scriptengine.ScriptEngine scriptEngine;
 
     public static void init() {
         INSTANCE = new CommandInterpreter();
