@@ -14,7 +14,7 @@ public abstract class PacketHandler implements Handler {
     private static PacketHandler firstHandler= new CommandPacketHandler();
 
     public static void handle(int packetId, DataInputStream inputStream) {
-        firstHandler.handle(new Object[] {packetId, inputStream});
+        firstHandler.handle(new Object[] {packetId, inputStream});  // Wrapping into Object[] in order for the compiler to recognize which handle() we want
     }
 
     @Override

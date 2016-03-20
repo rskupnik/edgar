@@ -2,7 +2,9 @@ package rskupnik.edgar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rskupnik.edgar.executor.Executor;
 import rskupnik.edgar.interpreter.CommandInterpreter;
+import rskupnik.edgar.job.Overseer;
 import rskupnik.edgar.networking.Server;
 import rskupnik.parrot.Parrot;
 
@@ -20,6 +22,7 @@ public final class Edgar {
         logger.info("Launching Edgar...");
         loadConfiguration();
         CommandInterpreter.init();
+        Executor.init();
         Server.launch();
     }
 
