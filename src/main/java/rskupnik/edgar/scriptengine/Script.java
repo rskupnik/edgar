@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 class Script implements Handler {
 
-    private static final Logger log = LogManager.getLogger(Script.class);
-
     private final GroovyObject script;
     private final String[] keywords;
 
@@ -23,16 +21,34 @@ class Script implements Handler {
 
     @Override
     public Handler next() {
-        return null;
+        return next;
     }
 
     @Override
     public boolean handle(Object... input) {
+        if (input == null || input.length < 1)
+            return next() == null ? false : next.handle(input);
+
+        if (keywords == null || keywords.length == 0)
+            return next() == null ? false : next.handle(input);
+
+        String cmd = (String) input[0];
+        if (!shouldHandle(cmd))
+            return next() == null ? false : next.handle(input);
+
+        return true;
+    }
+
+    private boolean shouldHandle(String cmd) {
+        for (String keyword : keywords) {
+            if (keyword.equals(cmd))
+                return true;
+        }
+
         return false;
     }
 
     void setNext(Script next) {
         this.next = next;
-        log.debug(Arrays.toString(keywords)+" next: "+next);
     }
 }

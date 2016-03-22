@@ -28,4 +28,8 @@ public final class CommandInterpreter {
         logger.info("Initializing command interpreter...");
         scriptEngine = new ScriptEngine();
     }
+
+    public void interpret(String cmd) {
+        scriptEngine.handle(cmd);
+    }
 }

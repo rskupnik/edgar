@@ -14,7 +14,7 @@ public class ClientEmulator {
             socket = new Socket("localhost", 9432);
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             outputStream.write(1);
-            outputStream.writeUTF("temperature tomorrow");
+            outputStream.writeUTF("zapal niebieskie");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } finally {
