@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.glue.designpatterns.chainofresponsibility.Handler;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 class Script implements Handler {
 
@@ -25,18 +26,20 @@ class Script implements Handler {
     }
 
     @Override
-    public boolean handle(Object... input) {
+    public Optional<Object> handle(Object... input) {
         if (input == null || input.length < 1)
-            return next() == null ? false : next.handle(input);
+            return next() == null ? Optional.empty() : next.handle(input);
 
         if (keywords == null || keywords.length == 0)
-            return next() == null ? false : next.handle(input);
+            return next() == null ? Optional.empty() : next.handle(input);
 
         String cmd = (String) input[0];
         if (!shouldHandle(cmd))
-            return next() == null ? false : next.handle(input);
+            return next() == null ? Optional.empty() : next.handle(input);
 
-        return true;
+        String output = (String) script.invokeMethod("act", new Object[] {cmd});
+
+        return Optional.of(output);
     }
 
     private boolean shouldHandle(String cmd) {

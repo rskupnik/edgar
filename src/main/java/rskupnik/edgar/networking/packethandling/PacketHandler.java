@@ -6,6 +6,8 @@ import rskupnik.edgar.glue.designpatterns.chainofresponsibility.Handler;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class PacketHandler implements Handler {
 
@@ -13,29 +15,29 @@ public abstract class PacketHandler implements Handler {
 
     private static PacketHandler firstHandler= new CommandPacketHandler();
 
-    public static void handle(int packetId, DataInputStream inputStream) {
-        firstHandler.handle(new Object[] {packetId, inputStream});  // Wrapping into Object[] in order for the compiler to recognize which handle() we want
+    public static void handle(int packetId, DataInputStream inputStream, UUID connectionId) {
+        firstHandler.handle(new Object[] {packetId, inputStream, connectionId});  // Wrapping into Object[] in order for the compiler to recognize which handle() we want
     }
 
     @Override
-    public boolean handle(Object... input) {
+    public Optional<Object> handle(Object... input) {
         try {
-            if (input == null || input.length < 2)
-                return next() == null ? false : next().handle(input);
+            if (input == null || input.length < 3)
+                return next() == null ? Optional.empty() : next().handle(input);
 
             int packetId = (int) input[0];
             if (packetId != getHandledPacketId())
-                return next() == null ? false : next().handle(input);
+                return next() == null ? Optional.empty() : next().handle(input);
 
-            handlePacket((DataInputStream) input[1]);
+            handlePacket((DataInputStream) input[1], (UUID) input[2]);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
 
-        return true;
+        return Optional.empty();
     }
 
     abstract int getHandledPacketId();
 
-    abstract void handlePacket(DataInputStream inputStream) throws IOException;
+    abstract void handlePacket(DataInputStream inputStream, UUID connectionId) throws IOException;
 }

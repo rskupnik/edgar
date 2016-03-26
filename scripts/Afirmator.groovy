@@ -4,7 +4,7 @@ class Afirmator {
         ["pieski małe dwa"]
     }
 
-    String act() {
+    String act(String cmd) {
         "chciały przejść przez rzeczkę"
     }
 }

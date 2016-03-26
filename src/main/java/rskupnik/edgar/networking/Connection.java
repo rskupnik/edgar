@@ -57,7 +57,7 @@ final class Connection extends Thread implements Observable {
                 }
 
                 logger.debug("Received a packet, ID: " + packetId);
-                PacketHandler.handle(packetId, clientInputStream);
+                PacketHandler.handle(packetId, clientInputStream, uuid);
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);

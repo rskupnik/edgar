@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.scriptengine.*;
 import rskupnik.edgar.scriptengine.ScriptEngine;
 
+import java.util.Optional;
+
 public final class CommandInterpreter {
 
     private static CommandInterpreter INSTANCE;
@@ -29,7 +31,8 @@ public final class CommandInterpreter {
         scriptEngine = new ScriptEngine();
     }
 
-    public void interpret(String cmd) {
-        scriptEngine.handle(cmd);
+    public Optional<String> interpret(String cmd) {
+        Optional<Object> output = scriptEngine.handle(cmd);
+        return output.isPresent() ? Optional.of((String) output.get()) : Optional.empty();
     }
 }

@@ -8,6 +8,7 @@ import rskupnik.edgar.glue.designpatterns.chainofresponsibility.Handler;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 final class CommandPacketHandler extends PacketHandler {
 
@@ -18,11 +19,11 @@ final class CommandPacketHandler extends PacketHandler {
     }
 
     @Override
-    void handlePacket(DataInputStream inputStream) throws IOException {
+    void handlePacket(DataInputStream inputStream, UUID connectionId) throws IOException {
         logger.debug("Packet type: COMMAND_PACKET");
         String cmd = inputStream.readUTF();
         logger.debug("Command retrieved: " + cmd);
-        Executor.getInstance().queue(new InterpretCommandTask(cmd));
+        Executor.getInstance().queue(new InterpretCommandTask(connectionId, cmd));
     }
 
     @Override

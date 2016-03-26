@@ -56,8 +56,8 @@ public final class ScriptEngine {
         log.info("Scripts loaded: " + scripts.size());
     }
 
-    public void handle(String cmd) {
-        log.info("Handled ["+cmd+"] ? : "+firstScript.handle(cmd));
+    public Optional<Object> handle(String cmd) {
+        return firstScript.handle(cmd);
     }
 
     private Optional<Script> registerScript(Path path) {
