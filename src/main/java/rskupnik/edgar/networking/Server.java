@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.glue.designpatterns.observer.Message;
 import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
+import rskupnik.edgar.networking.packethandling.packets.Packet;
 import rskupnik.edgar.other.Constants;
 import rskupnik.parrot.Parrot;
 
@@ -19,7 +20,7 @@ public final class Server extends Thread implements Observer {
 
     private static Server INSTANCE;
     private static final int PORT = Integer.parseInt(Parrot.get("port").orElse(String.valueOf(Constants.DEFAULT_PORT)));
-    private static final Logger logger = LogManager.getLogger(Server.class);
+    private static final Logger log = LogManager.getLogger(Server.class);
 
     private ServerSocket serverSocket;
     private final Map<UUID, Connection> connections = new HashMap<UUID, Connection>();
@@ -30,7 +31,7 @@ public final class Server extends Thread implements Observer {
         try {
             serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             System.exit(0);
         }
     }
@@ -53,7 +54,7 @@ public final class Server extends Thread implements Observer {
 
     @Override
     public void run() {
-        logger.info("Listening on port "+PORT);
+        log.info("Listening on port "+PORT);
         try {
             while (!exit) {
                 Socket clientSocket = serverSocket.accept();
@@ -63,18 +64,18 @@ public final class Server extends Thread implements Observer {
                 if (connection.isOk()) {    // Connection is not considered ok when there is an IOException in the constructor
                     connection.attach(this);
                     connections.put(uuid, connection);
-                    logger.info("Accepted a new connection from " + clientSocket.getInetAddress().getHostAddress());
-                    logger.debug("Assigned uuid: " + uuid);
+                    log.info("Accepted a new connection from " + clientSocket.getInetAddress().getHostAddress());
+                    log.trace("Assigned uuid: " + uuid);
                     connection.start();
                 }
             }
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -85,9 +86,20 @@ public final class Server extends Thread implements Observer {
                 UUID connectionUuid = (UUID) payload;
                 Connection connection = connections.get(connectionUuid);
                 connections.remove(connectionUuid);
-                logger.debug("Removed connection ["+connectionUuid+"] from ["+connection.getHost()+"]");
-                logger.debug("Remaining connections: "+connections.entrySet().size());
+                log.debug("Removed connection ["+connectionUuid+"] from ["+connection.getHost()+"]");
+                log.debug("Remaining connections: "+connections.entrySet().size());
                 break;
         }
+    }
+
+    public void send(UUID connectionId, Packet packet) {
+        Connection connection = connections.get(connectionId);
+
+        if (connection == null) {
+            log.debug("Connection ["+connectionId+"] doesn't exist, cannot send packet");
+            return;
+        }
+
+        connection.send(packet);
     }
 }

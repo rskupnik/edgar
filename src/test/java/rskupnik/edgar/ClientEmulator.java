@@ -1,5 +1,6 @@
 package rskupnik.edgar;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -15,6 +16,12 @@ public class ClientEmulator {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             outputStream.write(1);
             outputStream.writeUTF("pieski małe dwa");
+            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+            while (inputStream.read() < 0) {
+
+            }
+            String output = inputStream.readUTF();
+            System.out.println(output);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } finally {

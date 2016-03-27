@@ -20,7 +20,7 @@ final class CommandPacketHandler extends PacketHandler {
 
     @Override
     void handlePacket(DataInputStream inputStream, UUID connectionId) throws IOException {
-        logger.debug("Packet type: COMMAND_PACKET");
+        logger.debug("Received packet of type: COMMAND_PACKET");
         String cmd = inputStream.readUTF();
         logger.debug("Command retrieved: " + cmd);
         Executor.getInstance().queue(new InterpretCommandTask(connectionId, cmd));

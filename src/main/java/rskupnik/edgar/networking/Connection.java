@@ -6,19 +6,21 @@ import rskupnik.edgar.glue.designpatterns.observer.Message;
 import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
 import rskupnik.edgar.networking.packethandling.PacketHandler;
+import rskupnik.edgar.networking.packethandling.packets.Packet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 final class Connection extends Thread implements Observable {
 
-    private static final Logger logger = LogManager.getLogger(Connection.class);
+    private static final Logger log = LogManager.getLogger(Connection.class);
 
     private UUID uuid;
     private ServerSocket serverSocket;
@@ -39,7 +41,7 @@ final class Connection extends Thread implements Observable {
             this.clientInputStream = new DataInputStream(clientSocket.getInputStream());
             this.clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             ok = false;
         }
     }
@@ -56,28 +58,36 @@ final class Connection extends Thread implements Observable {
                     continue;
                 }
 
-                logger.debug("Received a packet, ID: " + packetId);
+                log.trace("Received a packet, ID: " + packetId);
                 PacketHandler.handle(packetId, clientInputStream, uuid);
             }
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             notify(Message.DISCONNECTED, uuid);
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }
 
     public void notify(Message message, Object payload) {
-        logger.debug("Sending a message of type " + message + " with payload: " + payload);
+        log.trace("Sending a message of type " + message + " with payload: " + payload);
         observers.forEach(observer -> observer.update(this, message, payload));
     }
 
     public void attach(Observer observer) {
         observers.add(observer);
+    }
+
+    void send(Packet packet) {
+        try {
+            packet.send(clientOutputStream);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     public boolean isOk() {
