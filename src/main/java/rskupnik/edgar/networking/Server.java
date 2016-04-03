@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.glue.designpatterns.observer.Message;
 import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
-import rskupnik.edgar.networking.packethandling.packets.Packet;
+import rskupnik.edgar.networking.packethandling.send.Packet;
 import rskupnik.edgar.other.Constants;
 import rskupnik.parrot.Parrot;
 
@@ -88,6 +88,8 @@ public final class Server extends Thread implements Observer {
                 connections.remove(connectionUuid);
                 log.debug("Removed connection ["+connectionUuid+"] from ["+connection.getHost()+"]");
                 log.debug("Remaining connections: "+connections.entrySet().size());
+                connection.disconnect();
+                connection = null;
                 break;
         }
     }

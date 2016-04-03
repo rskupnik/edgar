@@ -70,7 +70,7 @@ public final class ScriptEngine {
             scripts.add(script);
             log.info("Added a new script [" + path.toString() + "] with phrases " + Arrays.toString(phrases));
             return Optional.of(script);
-        } catch (IOException | InstantiationException | IllegalAccessException e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 

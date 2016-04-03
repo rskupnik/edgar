@@ -5,15 +5,14 @@ import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.glue.designpatterns.observer.Message;
 import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
-import rskupnik.edgar.networking.packethandling.PacketHandler;
-import rskupnik.edgar.networking.packethandling.packets.Packet;
+import rskupnik.edgar.networking.packethandling.receive.PacketHandler;
+import rskupnik.edgar.networking.packethandling.send.Packet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -88,6 +87,10 @@ final class Connection extends Thread implements Observable {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    void disconnect() {
+        exit = true;
     }
 
     public boolean isOk() {

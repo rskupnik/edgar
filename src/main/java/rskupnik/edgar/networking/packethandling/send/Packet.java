@@ -1,4 +1,4 @@
-package rskupnik.edgar.networking.packethandling.packets;
+package rskupnik.edgar.networking.packethandling.send;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

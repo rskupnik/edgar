@@ -3,7 +3,7 @@ package rskupnik.edgar.executor.tasks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.networking.Server;
-import rskupnik.edgar.networking.packethandling.packets.CommandOutputPacket;
+import rskupnik.edgar.networking.packethandling.send.CommandOutputPacket;
 
 import java.util.UUID;
 

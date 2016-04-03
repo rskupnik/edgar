@@ -1,4 +1,4 @@
-package rskupnik.edgar.networking.packethandling;
+package rskupnik.edgar.networking.packethandling.receive;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ public abstract class PacketHandler implements Handler {
 
     private static final Logger logger = LogManager.getLogger(PacketHandler.class);
 
-    private static PacketHandler firstHandler= new CommandPacketHandler();
+    private static PacketHandler firstHandler= new DisconnectPacketHandler();
 
     public static void handle(int packetId, DataInputStream inputStream, UUID connectionId) {
         firstHandler.handle(new Object[] {packetId, inputStream, connectionId});  // Wrapping into Object[] in order for the compiler to recognize which handle() we want

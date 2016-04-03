@@ -10,6 +10,8 @@ import java.util.Optional;
 
 class Script implements Handler {
 
+    private static final Logger log = LogManager.getLogger(Script.class);
+
     private final GroovyObject script;
     private final String[] keywords;
 
@@ -27,19 +29,24 @@ class Script implements Handler {
 
     @Override
     public Optional<Object> handle(Object... input) {
-        if (input == null || input.length < 1)
-            return next() == null ? Optional.empty() : next.handle(input);
+        try {
+            if (input == null || input.length < 1)
+                return next() == null ? Optional.empty() : next.handle(input);
 
-        if (keywords == null || keywords.length == 0)
-            return next() == null ? Optional.empty() : next.handle(input);
+            if (keywords == null || keywords.length == 0)
+                return next() == null ? Optional.empty() : next.handle(input);
 
-        String cmd = (String) input[0];
-        if (!shouldHandle(cmd))
-            return next() == null ? Optional.empty() : next.handle(input);
+            String cmd = (String) input[0];
+            if (!shouldHandle(cmd))
+                return next() == null ? Optional.empty() : next.handle(input);
 
-        String output = (String) script.invokeMethod("act", new Object[] {cmd});
+            String output = (String) script.invokeMethod("act", new Object[]{cmd});
 
-        return Optional.of(output);
+            return Optional.of(output);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Optional.of("Error");
+        }
     }
 
     private boolean shouldHandle(String cmd) {

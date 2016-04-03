@@ -15,7 +15,7 @@ public class ClientEmulator {
             socket = new Socket("localhost", 9432);
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             outputStream.write(1);
-            outputStream.writeUTF("pieski małe dwa");
+            outputStream.writeUTF("temperatura jutro");
             DataInputStream inputStream = new DataInputStream(socket.getInputStream());
             while (inputStream.read() < 0) {
 

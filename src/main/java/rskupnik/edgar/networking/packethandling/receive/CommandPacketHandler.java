@@ -1,4 +1,4 @@
-package rskupnik.edgar.networking.packethandling;
+package rskupnik.edgar.networking.packethandling.receive;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +33,6 @@ final class CommandPacketHandler extends PacketHandler {
 
     @Override
     public Handler next() {
-        return null;
+        return new HandshakePacketHandler();
     }
 }
