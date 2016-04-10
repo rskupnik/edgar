@@ -1,8 +1,8 @@
 package rskupnik.edgar.executor;
 
+import com.github.rskupnik.parrot.Parrot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import rskupnik.parrot.Parrot;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

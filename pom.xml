@@ -14,6 +14,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>git-rskupnik</id>
+      <name>rskupnik's Git based repo</name>
+      <url>https://github.com/rskupnik/maven-repo/raw/master/</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.javalite</groupId>
@@ -46,9 +54,9 @@
       <version>2.5</version>
     </dependency>
     <dependency>
-      <groupId>rskupnik</groupId>
+      <groupId>com.github.rskupnik</groupId>
       <artifactId>parrot</artifactId>
-      <version>1.0</version>
+      <version>1.1</version>
     </dependency>
   </dependencies>
   

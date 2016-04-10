@@ -7,7 +7,7 @@ import rskupnik.edgar.glue.designpatterns.observer.Observable;
 import rskupnik.edgar.glue.designpatterns.observer.Observer;
 import rskupnik.edgar.networking.packethandling.send.Packet;
 import rskupnik.edgar.other.Constants;
-import rskupnik.parrot.Parrot;
+import com.github.rskupnik.parrot.Parrot;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,11 +1,11 @@
 package rskupnik.edgar;
 
+import com.github.rskupnik.parrot.Parrot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import rskupnik.edgar.executor.Executor;
 import rskupnik.edgar.interpreter.CommandInterpreter;
 import rskupnik.edgar.networking.Server;
-import rskupnik.parrot.Parrot;
 
 import java.io.IOException;
 
