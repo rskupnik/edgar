@@ -7,7 +7,7 @@ import rskupnik.edgar.networking.packethandling.send.CommandOutputPacket;
 
 import java.util.UUID;
 
-public class SendOutputTask extends ConnectionInfo {
+public final class SendOutputTask extends ConnectionInfo {
 
     private static final Logger log = LogManager.getLogger(SendOutputTask.class);
 

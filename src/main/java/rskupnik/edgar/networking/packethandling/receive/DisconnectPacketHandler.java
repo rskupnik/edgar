@@ -10,7 +10,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-public class DisconnectPacketHandler extends PacketHandler {
+final class DisconnectPacketHandler extends PacketHandler {
 
     private static final Logger log = LogManager.getLogger(DisconnectPacketHandler.class);
 
