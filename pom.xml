@@ -14,6 +14,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>bintray</name>
+      <url>http://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.javalite</groupId>
@@ -36,11 +47,6 @@
       <version>1.0</version>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
       <version>2.5</version>
@@ -50,48 +56,27 @@
       <artifactId>log4j-core</artifactId>
       <version>2.5</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.rskupnik</groupId>
+      <artifactId>parrot</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.rskupnik</groupId>
+      <artifactId>pigeon-tcp-server</artifactId>
+      <version>1.2</version>
+    </dependency>
   </dependencies>
   
   <build>
 	<plugins>
-      <plugin>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <configuration>
-              <sourceDirs>
-                <source>src/main/java</source>
-              </sourceDirs>
-            </configuration>
-          </execution>
-          <execution>
-            <id>test-compile</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>test-compile</goal>
-            </goals>
-            <configuration>
-              <sourceDirs>
-                <source>src/test/java</source>
-              </sourceDirs>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
             <manifest>
-              <mainClass>rskupnik.edgar.Edgar</mainClass>
+              <mainClass>com.github.rskupnik.edgar.Edgar</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -108,6 +93,14 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>
