@@ -5,6 +5,7 @@ import com.github.rskupnik.edgar.executor.tasks.InterpretCommandTask;
 import com.github.rskupnik.edgar.networking.packets.CommandPacket;
 import com.github.rskupnik.edgar.networking.packets.HandshakeResponsePacket;
 import com.github.rskupnik.pigeon.commons.Connection;
+import com.github.rskupnik.pigeon.commons.IncomingPacketHandleMode;
 import com.github.rskupnik.pigeon.commons.Packet;
 import com.github.rskupnik.pigeon.commons.callback.ServerCallbackHandler;
 import com.github.rskupnik.pigeon.commons.exceptions.PigeonException;
@@ -35,11 +36,16 @@ public class Network implements com.github.rskupnik.pigeon.commons.PacketHandler
 
     public void launch() throws PigeonException {
         server = Pigeon.newServer()
+            .withIncomingPacketHandleMode(IncomingPacketHandleMode.HANDLER)
             .withPacketHandler(this)
             .withServerCallbackHandler(this)
             .build();
 
         server.start();
+    }
+
+    public PigeonTcpServer getServer() {
+        return server;
     }
 
     @Override
@@ -81,9 +87,5 @@ public class Network implements com.github.rskupnik.pigeon.commons.PacketHandler
     @Override
     public void onDisconnected(Connection connection) {
 
-    }
-
-    public PigeonTcpServer getServer() {
-        return server;
     }
 }
